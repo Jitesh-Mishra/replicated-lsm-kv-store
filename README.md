@@ -59,7 +59,7 @@ Where the kills landed (fsync = always): 250 at a random moment, and 250 at name
 
 **What this does and doesn't prove.** SIGKILL tests a process crash. The OS keeps data it accepted, which is why `fsync=none` also loses nothing here. Power loss is what fsync protects against. That's covered by the WAL's torn-tail tests and by the design (fsync before ack, temp file plus rename plus directory fsync), not by this harness.
 
-**The harness catches real bugs.** Moving one line, retiring the old WAL before the MANIFEST names the new SSTable, lost 843 acknowledged writes in 40 rounds. All 12 unit tests still passed on that bug. That is why the release gate runs the harness, not just the tests (section 6).
+**The harness catches real bugs.** Moving one line, retiring the old WAL before the MANIFEST names the new SSTable, lost 1,233 acknowledged writes in 150 rounds in CI. All 12 unit tests still passed on that bug. That is why the release gate runs the harness, not just the tests (section 6).
 
 ### 2. Replication: what failover costs in each mode
 

@@ -18,7 +18,7 @@ Read this, then run `pytest -q` and `python -m chaos.crash_harness --rounds 50` 
 
 **How do you know it works?**
 - 15 s: 500 SIGKILLs at random moments and at named points inside flush and compaction, 365,005 acknowledged ops, 0 lost, 0 corrupt reads.
-- 60 s: The parent only trusts operations the child reported as acknowledged. The one op in flight at the kill may land or not; 388 landed, 99 didn't, both correct. And the harness does catch bugs: moving one line (retire the WAL before the MANIFEST) lost 843 writes in 40 rounds while all unit tests passed.
+- 60 s: The parent only trusts operations the child reported as acknowledged. The one op in flight at the kill may land or not; 388 landed, 99 didn't, both correct. And the harness does catch bugs: moving one line (retire the WAL before the MANIFEST) lost 1,233 writes in 150 rounds in CI while all unit tests passed.
 - Evidence: `reports/crash_fsync_always.json`, `chaos/crash_harness.py`.
 
 **Doesn't SIGKILL leave data in the page cache? Then fsync isn't tested.**

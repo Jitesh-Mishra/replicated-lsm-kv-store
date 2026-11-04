@@ -13,5 +13,5 @@ generations are retired (deleted or archived).
 
 **Trade-off.** One extra fsync plus rename per flush and per compaction. In exchange, there is one place to reason
 about recovery, and the crash harness can kill at every step around it. Getting the order wrong is exactly the bug
-the canary branch demonstrates: retiring the WAL before the MANIFEST is written lost 843 acknowledged writes in
-40 rounds.
+the canary branch demonstrates: retiring the WAL before the MANIFEST is written lost 1,233 acknowledged writes in
+150 CI rounds.
