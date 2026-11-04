@@ -1,27 +1,27 @@
 system,tier,workload,ops,ops_per_s,p50_us,p99_us
-lsmkv,durable,load,100000,4319,189.1,646.9
-lsmkv,durable,A,20000,9388,76.8,403.9
-lsmkv,durable,B,20000,41256,5.0,372.8
-lsmkv,durable,C,20000,155648,2.7,23.6
-lsmkv,durable,W,20000,4760,178.7,622.1
-lsmkv,durable,read_amplification,49007,,0.348,sstables=3 bloom_skips_per_get=0.34
+lsmkv,durable,load,100000,4535,179.0,696.1
+lsmkv,durable,A,20000,8505,101.0,496.4
+lsmkv,durable,B,20000,47454,4.8,308.6
+lsmkv,durable,C,20000,145219,3.1,25.5
+lsmkv,durable,W,20000,5113,167.3,542.7
+lsmkv,durable,read_amplification,49007,,0.351,sstables=3 bloom_skips_per_get=0.35
 lsmkv,durable,disk_bytes,,,16835607,
-sqlite,durable,load,100000,5180,144.8,596.7
-sqlite,durable,A,20000,219540,4.0,11.3
-sqlite,durable,B,20000,207570,4.0,11.8
-sqlite,durable,C,20000,238210,3.8,11.5
-sqlite,durable,W,20000,215538,4.3,11.7
-sqlite,durable,disk_bytes,,,18189960,
-lsmkv,relaxed,load,100000,79231,6.3,26.9
-lsmkv,relaxed,A,20000,113063,5.2,32.2
-lsmkv,relaxed,B,20000,140249,2.8,24.5
-lsmkv,relaxed,C,20000,136732,3.0,30.9
-lsmkv,relaxed,W,20000,140246,5.0,19.7
-lsmkv,relaxed,read_amplification,49007,,0.348,sstables=3 bloom_skips_per_get=0.34
+sqlite,durable,load,100000,5513,137.2,577.7
+sqlite,durable,A,20000,13397,50.7,276.4
+sqlite,durable,B,20000,62620,4.9,259.2
+sqlite,durable,C,20000,213122,4.0,12.3
+sqlite,durable,W,20000,6227,128.3,527.1
+sqlite,durable,disk_bytes,,,18247304,
+lsmkv,relaxed,load,100000,61696,7.8,38.7
+lsmkv,relaxed,A,20000,115167,5.5,32.6
+lsmkv,relaxed,B,20000,123384,3.5,29.9
+lsmkv,relaxed,C,20000,146804,3.0,24.4
+lsmkv,relaxed,W,20000,122353,5.8,25.5
+lsmkv,relaxed,read_amplification,49007,,0.351,sstables=3 bloom_skips_per_get=0.35
 lsmkv,relaxed,disk_bytes,,,16835607,
-sqlite,relaxed,load,100000,22441,8.7,61.0
-sqlite,relaxed,A,20000,202606,4.3,12.6
-sqlite,relaxed,B,20000,239723,3.8,8.2
-sqlite,relaxed,C,20000,222710,4.0,10.4
-sqlite,relaxed,W,20000,228299,4.1,9.9
-sqlite,relaxed,disk_bytes,,,18189960,
+sqlite,relaxed,load,100000,20293,10.3,68.6
+sqlite,relaxed,A,20000,58423,6.4,33.5
+sqlite,relaxed,B,20000,177201,4.0,13.1
+sqlite,relaxed,C,20000,217668,3.9,12.8
+sqlite,relaxed,W,20000,32284,10.1,50.8
+sqlite,relaxed,disk_bytes,,,18247304,
