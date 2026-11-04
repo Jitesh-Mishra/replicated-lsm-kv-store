@@ -1,0 +1,49 @@
+project: replicated-lsm-kv-store
+state: PROOF RUN
+environment: cloud VM, 2 vCPU, 7 GB RAM, local disk (fsync about 200 us), Python 3.13; CI on GitHub Actions ubuntu-latest, Python 3.12
+data: synthetic key-value workloads only
+claims:
+  - id: crash_recovery
+    text: 0 acknowledged writes lost and 0 corrupt reads across 500 SIGKILL injections (365,005 acknowledged ops, fsync=always), 250 of them at named points inside write, flush and compaction
+    source: reports/crash_fsync_always.json
+    verified: true
+  - id: crash_recovery_none
+    text: same harness with fsync=none, 200 injections, 649,839 acked ops, 0 lost (process crash only, not power loss)
+    source: reports/crash_fsync_none.json
+    verified: true
+  - id: recovery_time
+    text: recovery p50 1.1 ms, p99 3.6 ms
+    source: reports/crash_fsync_always.json
+    verified: true
+  - id: failover
+    text: 0 acknowledged writes lost on leader failover under sync replication (5 kills, 5,330 acked) vs 257 under async (5 kills, 18,714 acked); sync 258 ops/s vs async 881 ops/s
+    source: reports/failover.json
+    verified: true
+  - id: pitr
+    text: 120,000 of 120,000 keys matched an oracle across 6 point-in-time restores (snapshot + archived WAL)
+    source: reports/backup_restore.json
+    verified: true
+  - id: incident
+    text: stuck compaction detected by Prometheus alert KVCompactionBacklog 45.8 s after the fault, resolved by the runbook action at 46.4 s, 0 client errors (scripted responder)
+    source: reports/incident_drill.json, docs/incident_postmortem.md
+    verified: true
+  - id: bench_durable
+    text: with an fsync per commit, SQLite WAL mode beats lsmkv (5,513 vs 4,535 inserts/s; 6,227 vs 5,113 updates/s; 213,122 vs 145,219 reads/s)
+    source: reports/bench_vs_sqlite.csv
+    verified: true
+  - id: bench_relaxed
+    text: without a per-commit fsync, lsmkv 61,696 vs SQLite 20,293 inserts/s (3.0x) and 122,353 vs 32,284 updates/s (3.8x); SQLite faster on reads
+    source: reports/bench_vs_sqlite.csv
+    verified: true
+  - id: bloom
+    text: 1% target bloom filter measured 1.02% false positives (theory 1.00%), 9.6 bits per key, 7 hashes
+    source: reports/bloom_fp.json
+    verified: true
+  - id: canary_gate
+    text: CI release gate blocked a commit with a WAL ordering bug (1,233 acked writes lost, all 12 unit tests passing); passed on main
+    source: reports/canary_gate.md (Actions runs 41897070804, 41897071264)
+    verified: true
+not_claimed:
+  - power-loss durability tested with a fault-injecting filesystem
+  - multi-node consensus or automatic failover
+  - performance beyond a single 2-vCPU machine
