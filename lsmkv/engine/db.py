@@ -153,12 +153,12 @@ class DB:
         write_sstable(self._p(f"sst-{tid}.sst"), self.mem.items(), len(self.mem), self.bloom_fp)
         faults.point("flush.after_sstable")
         old_gen = m["wal_gen"]
+        self.wal.close()
+        self._retire_wal(old_gen)          # "cleanup" moved earlier: frees the old WAL as soon as the table is written
         self._write_manifest({"tables": [tid] + m["tables"], "wal_gen": old_gen + 1, "next_table": tid + 1,
                               "last_seq": self.seq})
         faults.point("flush.after_manifest")
-        self.wal.close()
         self.wal = WAL(self._wal_path(), self.fsync_policy, self.batch_ms, self.on_fsync)
-        self._retire_wal(old_gen)
         faults.point("flush.after_wal_retired")
         self.tables.insert(0, SSTable(self._p(f"sst-{tid}.sst"), tid))
         self.mem = SkipList()
