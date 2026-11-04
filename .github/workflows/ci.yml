@@ -1,0 +1,24 @@
+name: CI
+on:
+  push: {branches: [main]}
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - name: Alert rules are valid
+        run: |
+          curl -sSL https://github.com/prometheus/prometheus/releases/download/v3.5.0/prometheus-3.5.0.linux-amd64.tar.gz | tar xz
+          prometheus-3.5.0.linux-amd64/promtool check rules ops/alerts.yml
+      - name: Docker image builds and serves
+        run: |
+          docker build -t lsmkv .
+          docker run -d --name kv -p 8080:8080 lsmkv
+          for i in $(seq 1 30); do curl -sf localhost:8080/healthz && break; sleep 1; done
+          curl -sf -X PUT localhost:8080/kv/hello --data world
+          test "$(curl -sf localhost:8080/kv/hello)" = world

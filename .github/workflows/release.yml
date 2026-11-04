@@ -1,0 +1,38 @@
+name: Release (canary gate)
+# A release is published only if the crash-recovery gate passes: 150 SIGKILL injections with fsync=always,
+# zero lost acknowledged writes and zero corrupt reads. Branches named canary-demo/* run the gate without
+# publishing, to show a broken commit being stopped.
+on:
+  push:
+    tags: ["v*"]
+    branches: ["canary-demo/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  crash-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - name: Crash-recovery gate (150 SIGKILL injections)
+        run: python -m chaos.crash_harness --rounds 150 --out gate.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: crash-gate, path: gate.json, if-no-files-found: ignore}
+  release:
+    needs: crash-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish
+        env: {GH_TOKEN: "${{ github.token }}"}
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            gh release create "$GITHUB_REF_NAME" --generate-notes
+          else
+            echo "gate passed on $GITHUB_REF; a tag would be released"
+          fi

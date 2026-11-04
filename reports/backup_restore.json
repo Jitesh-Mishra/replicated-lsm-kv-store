@@ -1,0 +1,56 @@
+{
+ "keys": 20000,
+ "ops": 50000,
+ "snapshot": {
+  "at_op": 20000,
+  "seq": 20000,
+  "seconds": 0.066,
+  "tables": 1
+ },
+ "restores": [
+  {
+   "restore_to_op": 23518,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 3518,
+   "restore_seconds": 0.11
+  },
+  {
+   "restore_to_op": 23700,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 3700,
+   "restore_seconds": 0.09
+  },
+  {
+   "restore_to_op": 25425,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 5425,
+   "restore_seconds": 0.09
+  },
+  {
+   "restore_to_op": 29875,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 9875,
+   "restore_seconds": 0.11
+  },
+  {
+   "restore_to_op": 34810,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 14810,
+   "restore_seconds": 0.14
+  },
+  {
+   "restore_to_op": 50000,
+   "keys_checked": 20000,
+   "keys_matching": 20000,
+   "wal_records_replayed": 30000,
+   "restore_seconds": 0.25
+  }
+ ],
+ "total_keys_checked": 120000,
+ "total_keys_matching": 120000
+}

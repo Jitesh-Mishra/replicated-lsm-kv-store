@@ -1,0 +1,27 @@
+system,tier,workload,ops,ops_per_s,p50_us,p99_us
+lsmkv,durable,load,100000,4319,189.1,646.9
+lsmkv,durable,A,20000,9388,76.8,403.9
+lsmkv,durable,B,20000,41256,5.0,372.8
+lsmkv,durable,C,20000,155648,2.7,23.6
+lsmkv,durable,W,20000,4760,178.7,622.1
+lsmkv,durable,read_amplification,49007,,0.348,sstables=3 bloom_skips_per_get=0.34
+lsmkv,durable,disk_bytes,,,16835607,
+sqlite,durable,load,100000,5180,144.8,596.7
+sqlite,durable,A,20000,219540,4.0,11.3
+sqlite,durable,B,20000,207570,4.0,11.8
+sqlite,durable,C,20000,238210,3.8,11.5
+sqlite,durable,W,20000,215538,4.3,11.7
+sqlite,durable,disk_bytes,,,18189960,
+lsmkv,relaxed,load,100000,79231,6.3,26.9
+lsmkv,relaxed,A,20000,113063,5.2,32.2
+lsmkv,relaxed,B,20000,140249,2.8,24.5
+lsmkv,relaxed,C,20000,136732,3.0,30.9
+lsmkv,relaxed,W,20000,140246,5.0,19.7
+lsmkv,relaxed,read_amplification,49007,,0.348,sstables=3 bloom_skips_per_get=0.34
+lsmkv,relaxed,disk_bytes,,,16835607,
+sqlite,relaxed,load,100000,22441,8.7,61.0
+sqlite,relaxed,A,20000,202606,4.3,12.6
+sqlite,relaxed,B,20000,239723,3.8,8.2
+sqlite,relaxed,C,20000,222710,4.0,10.4
+sqlite,relaxed,W,20000,228299,4.1,9.9
+sqlite,relaxed,disk_bytes,,,18189960,

@@ -1,0 +1,137 @@
+{
+ "setup": "leader and follower as separate uvicorn processes on one machine, fsync=always on both, 8 client threads writing unique 32-byte values, leader SIGKILLed at a random 3-5 s, async ships every 50 ms",
+ "summary": {
+  "sync": {
+   "trials": 5,
+   "acked_writes": 5330,
+   "lost_acked_writes": 0,
+   "lost_per_trial": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "write_ops_per_s_median": 258.2,
+   "put_p50_ms_median": 30.07,
+   "put_p99_ms_median": 44.02
+  },
+  "async": {
+   "trials": 5,
+   "acked_writes": 18714,
+   "lost_acked_writes": 257,
+   "lost_per_trial": [
+    43,
+    45,
+    78,
+    53,
+    38
+   ],
+   "write_ops_per_s_median": 881.4,
+   "put_p50_ms_median": 8.41,
+   "put_p99_ms_median": 19.09
+  }
+ },
+ "trials": [
+  {
+   "mode": "sync",
+   "acked_writes": 836,
+   "lost_acked_writes": 0,
+   "leader_killed_after_s": 3.32,
+   "write_ops_per_s": 251.4,
+   "put_p50_ms": 30.26,
+   "put_p99_ms": 44.02,
+   "promoted_first_write_ms": 3.6
+  },
+  {
+   "mode": "sync",
+   "acked_writes": 1084,
+   "lost_acked_writes": 0,
+   "leader_killed_after_s": 4.19,
+   "write_ops_per_s": 258.5,
+   "put_p50_ms": 30.07,
+   "put_p99_ms": 41.78,
+   "promoted_first_write_ms": 3.1
+  },
+  {
+   "mode": "sync",
+   "acked_writes": 873,
+   "lost_acked_writes": 0,
+   "leader_killed_after_s": 3.34,
+   "write_ops_per_s": 261.5,
+   "put_p50_ms": 29.32,
+   "put_p99_ms": 44.71,
+   "promoted_first_write_ms": 3.0
+  },
+  {
+   "mode": "sync",
+   "acked_writes": 1256,
+   "lost_acked_writes": 0,
+   "leader_killed_after_s": 5.0,
+   "write_ops_per_s": 251.1,
+   "put_p50_ms": 30.4,
+   "put_p99_ms": 52.75,
+   "promoted_first_write_ms": 3.1
+  },
+  {
+   "mode": "sync",
+   "acked_writes": 1281,
+   "lost_acked_writes": 0,
+   "leader_killed_after_s": 4.96,
+   "write_ops_per_s": 258.2,
+   "put_p50_ms": 29.99,
+   "put_p99_ms": 42.46,
+   "promoted_first_write_ms": 3.3
+  },
+  {
+   "mode": "async",
+   "acked_writes": 2774,
+   "lost_acked_writes": 43,
+   "leader_killed_after_s": 3.34,
+   "write_ops_per_s": 829.9,
+   "put_p50_ms": 8.92,
+   "put_p99_ms": 19.09,
+   "promoted_first_write_ms": 2.8
+  },
+  {
+   "mode": "async",
+   "acked_writes": 4092,
+   "lost_acked_writes": 45,
+   "leader_killed_after_s": 4.21,
+   "write_ops_per_s": 970.9,
+   "put_p50_ms": 7.41,
+   "put_p99_ms": 18.05,
+   "promoted_first_write_ms": 3.7
+  },
+  {
+   "mode": "async",
+   "acked_writes": 2934,
+   "lost_acked_writes": 78,
+   "leader_killed_after_s": 3.33,
+   "write_ops_per_s": 881.4,
+   "put_p50_ms": 8.41,
+   "put_p99_ms": 19.67,
+   "promoted_first_write_ms": 2.8
+  },
+  {
+   "mode": "async",
+   "acked_writes": 4769,
+   "lost_acked_writes": 53,
+   "leader_killed_after_s": 5.0,
+   "write_ops_per_s": 953.3,
+   "put_p50_ms": 7.46,
+   "put_p99_ms": 18.7,
+   "promoted_first_write_ms": 17.8
+  },
+  {
+   "mode": "async",
+   "acked_writes": 4145,
+   "lost_acked_writes": 38,
+   "leader_killed_after_s": 4.97,
+   "write_ops_per_s": 833.3,
+   "put_p50_ms": 8.92,
+   "put_p99_ms": 19.41,
+   "promoted_first_write_ms": 4.4
+  }
+ ]
+}

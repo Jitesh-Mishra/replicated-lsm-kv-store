@@ -103,25 +103,27 @@ def timed(fn, ops):
 
 def run(out, n=N, ops=OPS):
     rows = []
-    val = os.urandom(VSIZE)
+    # a fresh value for every write: SQLite skips the page write (and the fsync) when a row is overwritten with
+    # identical bytes, which would make its update numbers meaningless
+    vals = [os.urandom(VSIZE) for _ in range(max(n, ops))]
     load_order = np.random.default_rng(1).permutation(n)
     for durable in (True, False):
         for name, cls in (("lsmkv", LSM), ("sqlite", SQLite)):
             work = tempfile.mkdtemp(prefix="bench-")
             s = cls(os.path.join(work, "db"), durable)
             tier = "durable" if durable else "relaxed"
-            ops_s, p50, p99 = timed(lambda i: s.put(key(int(i)), val), load_order)
+            ops_s, p50, p99 = timed(lambda i: s.put(key(int(i)), vals[int(i)]), load_order)
             rows.append({"system": name, "tier": tier, "workload": "load", "ops": n, "ops_per_s": round(ops_s),
-                         "p50_us": round(p50, 1), "p99_us": round(p99, 1)})
+                         "p50_us": round(float(p50), 1), "p99_us": round(float(p99), 1)})
             print(rows[-1], flush=True)
             for wl, read_frac in WORKLOADS.items():
                 ks = zipf_keys(n, ops, seed=hash(wl) % 1000)
                 rng = np.random.default_rng(2)
                 is_read = rng.random(ops) < read_frac
-                seq = [(bool(r), key(k)) for r, k in zip(is_read, ks)]
-                ops_s, p50, p99 = timed(lambda o: s.get(o[1]) if o[0] else s.put(o[1], val), seq)
+                seq = [(bool(r), key(k), vals[j]) for j, (r, k) in enumerate(zip(is_read, ks))]
+                ops_s, p50, p99 = timed(lambda o: s.get(o[1]) if o[0] else s.put(o[1], o[2]), seq)
                 rows.append({"system": name, "tier": tier, "workload": wl, "ops": ops, "ops_per_s": round(ops_s),
-                             "p50_us": round(p50, 1), "p99_us": round(p99, 1)})
+                             "p50_us": round(float(p50), 1), "p99_us": round(float(p99), 1)})
                 print(rows[-1], flush=True)
             if name == "lsmkv":
                 st = s.db.stats
