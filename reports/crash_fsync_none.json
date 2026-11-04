@@ -1,0 +1,29 @@
+{
+ "rounds": 200,
+ "acked_ops": 649839,
+ "lost_acked_writes": 0,
+ "corrupt_reads": 0,
+ "inflight_landed": 132,
+ "inflight_not_landed": 52,
+ "kill_sites": {
+  "timer": 100,
+  "write.after_wal": 20,
+  "flush.after_manifest": 16,
+  "flush.after_wal_retired": 8,
+  "write.before_wal": 25,
+  "compaction.after_manifest": 4,
+  "flush.after_sstable": 15,
+  "compaction.before_manifest": 7,
+  "sstable.before_rename": 5
+ },
+ "torn_tail_bytes_total": 0,
+ "recovery_ms_p50": 1.31,
+ "recovery_ms_p99": 3.89,
+ "recovery_ms_max": 20.77,
+ "wal_records_replayed_median": 56.0,
+ "sstables_after_round_max": 10,
+ "fsync": "none",
+ "memtable_bytes": 8192,
+ "keys": 2000,
+ "seconds": 61.5
+}

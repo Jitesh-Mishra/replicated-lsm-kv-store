@@ -1,0 +1,68 @@
+# Prometheus alerting rules for lsmkv. Each alert links its runbook in ops/runbooks/.
+# Checked in CI with: promtool check rules ops/alerts.yml
+groups:
+  - name: lsmkv
+    rules:
+      - alert: KVDown
+        expr: up{job="lsmkv"} == 0
+        for: 30s
+        labels: {severity: page}
+        annotations:
+          summary: "lsmkv instance {{ $labels.instance }} is not scraping"
+          runbook: ops/runbooks/KVDown.md
+
+      - alert: KVCompactionStuck
+        expr: kv_compaction_job_age_seconds > 60
+        for: 30s
+        labels: {severity: page}
+        annotations:
+          summary: "a compaction job has been running for {{ $value | humanizeDuration }}"
+          runbook: ops/runbooks/KVCompactionStuck.md
+
+      - alert: KVCompactionBacklog
+        expr: kv_compaction_backlog_tables >= 12
+        for: 30s
+        labels: {severity: page}
+        annotations:
+          summary: "{{ $value }} SSTables waiting for compaction (reads probe more files, disk grows)"
+          runbook: ops/runbooks/KVCompactionBacklog.md
+
+      - alert: KVReadLatencyHigh
+        expr: histogram_quantile(0.99, sum by (le) (rate(kv_request_seconds_bucket{op="get"}[1m]))) > 0.05
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: "get p99 above 50 ms"
+          runbook: ops/runbooks/KVReadLatencyHigh.md
+
+      - alert: KVWriteErrors
+        expr: sum(rate(kv_requests_total{op=~"put|delete", status=~"5.."}[1m])) > 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: "writes are failing ({{ $value }} per second)"
+          runbook: ops/runbooks/KVWriteErrors.md
+
+      - alert: KVReplicationLagHigh
+        expr: kv_replication_lag_records > 1000
+        for: 1m
+        labels: {severity: ticket}
+        annotations:
+          summary: "follower is {{ $value }} records behind; async failover would lose them"
+          runbook: ops/runbooks/KVReplicationLagHigh.md
+
+      - alert: KVWalFsyncSlow
+        expr: histogram_quantile(0.99, sum by (le) (rate(kv_wal_fsync_seconds_bucket[1m]))) > 0.05
+        for: 2m
+        labels: {severity: ticket}
+        annotations:
+          summary: "WAL fsync p99 above 50 ms (disk trouble; every durable write waits on it)"
+          runbook: ops/runbooks/KVWalFsyncSlow.md
+
+      - alert: KVDiskUsageHigh
+        expr: kv_disk_bytes > 50e9
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: "data directory above 50 GB"
+          runbook: ops/runbooks/KVDiskUsageHigh.md

@@ -1,0 +1,20 @@
+[
+ {
+  "target_fp": 0.01,
+  "keys": 100000,
+  "bits_per_key": 9.59,
+  "hashes": 7,
+  "theoretical_fp": 0.01004,
+  "measured_fp": 0.0102,
+  "absent_probes": 200000
+ },
+ {
+  "target_fp": 0.05,
+  "keys": 100000,
+  "bits_per_key": 6.24,
+  "hashes": 4,
+  "theoretical_fp": 0.05027,
+  "measured_fp": 0.050575,
+  "absent_probes": 200000
+ }
+]
